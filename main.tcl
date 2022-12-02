@@ -1,11 +1,9 @@
 #####
 #top layer
 
-global today_task
-lset today_task {}
+set today_task {}
 
 proc init_mainWindow {} {
-	puts $today_task
 	#set today_task {}
 	frame .fr_main
 	pack .fr_main
@@ -27,6 +25,7 @@ init_mainWindow
 #########
 #GenerateTask
 proc GenerateTask {} {
+	global today_task
 	toplevel .gen
 	wm resizable .gen 0 0
 	wm title .gen "generate new task"
@@ -34,14 +33,21 @@ proc GenerateTask {} {
 	entry .gen.task_name -textvariable task_new
 	pack .gen.task_name
 
-	#bind .gen.task_name <Return> {return_gene $task_new}
+	bind .gen.task_name <Return> {return_gene $task_new}
 
-	button .gen.bt_return -text return -command {return_gene $task_new}
+	button .gen.bt_return -text return -command {
+		lappend today_task $task_new;
+		puts $today_task;
+		destroy .fr_main;
+		init_mainWindow;
+		destroy .gen;
+	}
 	pack .gen.bt_return
 
 }
 
 proc return_gene { task_new } {
+	global today_task
 	lappend today_task $task_new;
 	puts $today_task;
 	destroy .fr_main;
