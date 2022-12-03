@@ -4,20 +4,26 @@
 set today_task {}
 
 proc init_mainWindow {} {
+	global today_task
 	#set today_task {}
 	frame .fr_main
 	pack .fr_main
 
 	#make header
 	label .fr_main.tlt -text "Today's Tasks"
-	pack .fr_main.tlt -side left
+	pack .fr_main.tlt -side top
 
 	#task frame
 	frame .fr_main.task
 	pack .fr_main.task -side top
 
 	button .fr_main.task.bt_gene -text "new" -command GenerateTask
-	pack .fr_main.task.bt_gene
+	pack .fr_main.task.bt_gene 
+
+	for {set i 0} {$i < [llength $today_task]} {incr i} {
+		label .fr_main.task.lbl$i -text [lindex $today_task $i]	
+		pack .fr_main.task.lbl$i 
+	}
 }
 
 init_mainWindow
@@ -35,13 +41,7 @@ proc GenerateTask {} {
 
 	bind .gen.task_name <Return> {return_gene $task_new}
 
-	button .gen.bt_return -text return -command {
-		lappend today_task $task_new;
-		puts $today_task;
-		destroy .fr_main;
-		init_mainWindow;
-		destroy .gen;
-	}
+	button .gen.bt_return -text return -command {return_gene $task_new}
 	pack .gen.bt_return
 
 }
