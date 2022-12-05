@@ -21,10 +21,11 @@ proc init_mainWindow {} {
 	pack .fr_main.task.bt_gene 
 
 	for {set i 0} {$i < [llength $today_task]} {incr i} {
-		checkbutton .fr_main.task.ck$i -text [lindex $today_task $i] -bg gray -height 2
+		checkbutton .fr_main.task.ck$i -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) -command save_task
 		pack .fr_main.task.ck$i -expand 1 -fill x -anchor w -pady 1
 	}
 }
+
 
 init_mainWindow
 
@@ -43,7 +44,8 @@ proc GenerateTask {} {
 
 	button .gen.bt_return -text return -command {return_gene $task_new; set task_new ""}
 	pack .gen.bt_return
-
+	
+	wm geometry .gen +350+350
 }
 
 proc return_gene { task_new } {
@@ -54,6 +56,22 @@ proc return_gene { task_new } {
 	init_mainWindow;
 	destroy .gen;
 }
+
+###################################
+#save the tasks
+
+proc save_task {} {
+	global today_task
+	global selected
+	set value ""
+	# todo save the task which is not selected
+	foreach {index boolean} [array get selected] {
+		if {$boolean} {
+			puts [lindex $today_task $index]
+		}
+	}
+}
+
 
 wm title . mainwindow
 wm geometry . 200x300+300+300
