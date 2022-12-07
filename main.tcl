@@ -4,7 +4,6 @@
 
 set today_task {}
 set TODAY_FILE {./DB/today.txt}
-set selected(100) 0 
 
 proc init_mainWindow {} {
 	global today_task
@@ -32,8 +31,11 @@ proc init_mainWindow {} {
 	button .fr_main.task.bt_gene -text "new" -command GenerateTask
 	pack .fr_main.task.bt_gene 
 
+	button .fr_main.bt_save -text "save" -command save_task
+	pack .fr_main.bt_save -side bottom
+
 	for {set i 0} {$i < [llength $today_task]} {incr i} {
-		checkbutton .fr_main.task.ck$i -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) -command save_task
+		checkbutton .fr_main.task.ck$i -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) 
 		pack .fr_main.task.ck$i -expand 1 -fill x -anchor w -pady 1
 	}
 }
@@ -81,6 +83,8 @@ proc save_task {} {
 		if {!$boolean} {
 			puts -nonewline $output_stream [lindex $today_task $index]
 			puts -nonewline $output_stream :
+			upvar selected($index) init
+			set init 0
 		}
 	}
 	close $output_stream
