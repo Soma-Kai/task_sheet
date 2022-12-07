@@ -1,11 +1,23 @@
 #####
+#toDo initialize selected list, remove the "blank" element, implement clear "add function"
 #top layer
 
 set today_task {}
+set TODAY_FILE {./DB/today.txt}
+set selected(100) 0 
 
 proc init_mainWindow {} {
 	global today_task
-	#set today_task {}
+	global TODAY_FILE
+	global selected
+
+	#set today_task 
+	set input_stream [open $TODAY_FILE r]
+	set today_task [split [gets $input_stream] :]
+	#delete the null
+	set index [lsearch $today_task ""]
+	set today_task [lreplace $today_task $index $index]
+	
 	frame .fr_main
 	pack .fr_main -expand 1 -fill both
 
@@ -49,12 +61,10 @@ proc GenerateTask {} {
 }
 
 proc return_gene { task_new } {
-	global today_task
-	lappend today_task $task_new;
-	puts $today_task;
-	destroy .fr_main;
-	init_mainWindow;
-	destroy .gen;
+	add_task $task_new
+	destroy .fr_main
+	init_mainWindow
+	destroy .gen
 }
 
 ###################################
@@ -62,16 +72,29 @@ proc return_gene { task_new } {
 
 proc save_task {} {
 	global today_task
-	global selected
-	set value ""
+	global selected 
+	global TODAY_FILE
+	#output stream
+	set output_stream [open $TODAY_FILE w]
 	# todo save the task which is not selected
 	foreach {index boolean} [array get selected] {
-		if {$boolean} {
-			puts [lindex $today_task $index]
+		if {!$boolean} {
+			puts -nonewline $output_stream [lindex $today_task $index]
+			puts -nonewline $output_stream :
 		}
 	}
+	close $output_stream
 }
 
+proc add_task {task_new} {
+	global today_task
+	global TODAY_FILE
+	#output stream
+	set outout_stream [open $TODAY_FILE a]
+	puts -nonewline $outout_stream $task_new
+	puts -nonewline $outout_stream :
+	close $outout_stream
+}
 
 wm title . mainwindow
 wm geometry . 200x300+300+300
