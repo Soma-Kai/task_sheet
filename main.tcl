@@ -2,8 +2,10 @@
 #toDo initialize selected list, remove the "blank" element, implement clear "add function"
 #top layer
 
+lappend auto_path "./test_put.tcl"
+
 set today_task {}
-set TODAY_FILE {./DB/today.txt}
+set TODAY_FILE {/Users/somakai/workspace/tcl-tk/study_sheet/DB/today.txt}
 set i 0
 
 proc init_mainWindow {} {
@@ -152,6 +154,7 @@ proc add_task {task_new} {
 	puts -nonewline $outout_stream :
 	close $outout_stream
 }
+
 
 wm title . mainwindow
 wm geometry . 400x300+300+300

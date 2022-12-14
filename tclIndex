@@ -1,0 +1,4 @@
+#Tcl auto load index file
+
+
+set auto_index(test_puts) "source $dir/test_put.tcl"

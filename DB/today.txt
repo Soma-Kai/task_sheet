@@ -1,1 +1,1 @@
-the interface of memo corresponding the task: binding the ck for double click (ought to check):improve layout:prepare the resume of tsmc:read the book about design of electron network:
+read the book about design of electron network:the interface of memo corresponding the task: binding the ck for double click (ought to check):improve layout:
