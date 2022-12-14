@@ -2,30 +2,42 @@ proc test_puts {} {
 	puts hello!world!!!!
 }
 
-oo::class create add_widget {
+oo::class create text_widget {
 	constructor {} {
-		make_mw
-		wm title . "tst"
-		wm geometry 300+300
+		my mw
 	}
 
-	method make_mw {} {
+	method mw {} {
 		frame .f
 		pack .f
 
-		button .f.bt -text test -command add_label
-		pack .f.bt
+		text .f.t
+		pack .f.t
+		
+		.f.t insert end test
+		bind .f.t <Return> {
+			test $con
+		}
+
+		wm title . test
+		wm geometry . +300+300
 	}
 
-	method add_label {} {
-		destroy .f
-		make_mw
-		label .f.lbl -text "added label"
-		pack .f.lbl
-		wm title . "tst"
-		wm geometry 300+300
+	method add {} {
+		frame .f.ff
+		pack .f.ff
+
+		label .f.ff.ad -text added
+		pack .f.ff.ad
+
+		wm title . test
+		wm geometry . +300+300
 	}
 }
 
-set instance [add_widget new]
-instance
+proc test {con} {
+	puts test
+	$con add
+}
+
+set con [text_widget new]

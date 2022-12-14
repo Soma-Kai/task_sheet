@@ -1,12 +1,14 @@
 #####
 #toDo initialize selected list, remove the "blank" element, implement clear "add function"
 #top layer
+#making binding function by referencing the test file using OOP
 
 lappend auto_path "./test_put.tcl"
 
 set today_task {}
 set TODAY_FILE {/Users/somakai/workspace/tcl-tk/study_sheet/DB/today.txt}
 set i 0
+variable path
 
 proc init_mainWindow {} {
 	global today_task
@@ -42,60 +44,41 @@ proc init_mainWindow {} {
 		pack .fr_main.task.ck$i -expand 1 -fill x -anchor w -pady 1
 
 		bind .fr_main.task.ck$i <Button-2> {
-			global i
+			puts [.fr_main.task.ck$i cget -text]
 			destroy .fr_main
-			make_memo $i
+			memo [lindex $today_task $i]
 		}
 	}
 }
 
 #############
 #binding function
-proc make_memo i {
-	global today_task
-	global TODAY_FILE
-	global selected
-
-	#set today_task 
-	set input_stream [open $TODAY_FILE r]
-	set today_task [split [gets $input_stream] :]
-	#delete the null
-	set index [lsearch $today_task ""]
-	set today_task [lreplace $today_task $index $index]
-	
-	frame .fr_main
-	pack .fr_main -expand 1 -fill both
-
-	#make header
-	label .fr_main.tlt -text "Today's Tasks"
-	pack .fr_main.tlt -side top
-
-	#task frame
-	frame .fr_main.task
-	pack .fr_main.task -side top -fill x
-
-	button .fr_main.task.bt_gene -text "new" -command GenerateTask
-	pack .fr_main.task.bt_gene 
-
-	for {set j 0} {$j < [llength $today_task]} {incr j} {
-		if { $j == $i } {
-			frame .fr_main.task.mini$i 
-			pack .fr_main.task.mini$i -side top -fill x
-			checkbutton .fr_main.task.mini$i.ck$i -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) -command save_task
-			.fr_main.task.mini$i.ck$i deselect 
-			pack .fr_main.task.mini$i.ck$i -expand 1 -fill x -anchor w -pady 1
-			text .fr_main.task.mini$i.editor$i
-			pack .fr_main.task.mini$i.editor$i
-		}
-
-		checkbutton .fr_main.task.ck$j -text [lindex $today_task $j] -bg gray -height 2 -variable selected($j) -command save_task
-		.fr_main.task.ck$j deselect 
-		pack .fr_main.task.ck$j -expand 1 -fill x -anchor w -pady 1
-
+proc memo {task_name} {
+	global path
+	#operation of file
+	puts $task_name
+	set path /Users/somakai/workspace/tcl-tk/study_sheet/DB/$task_name.txt
+	#exec touch $path
+	puts check
+	frame .f
+	pack .f
+	text .f.t 
+	pack .f.t 
+	.f.t insert end "remarks"
+	wm title . remarks
+	wm geometry . +300+300
+	bind .f.t <Return> {
+		global path
+		#save the remarks binding the corresponding task
+		set txt_remark [.f.t get 1.0 end]
+		#puts -nonewline $path $txt_remark
+		init_mainWindow
+		destroy .f
 	}
 }
 
-init_mainWindow
+
+
 
 #########
 #GenerateTask
@@ -155,6 +138,6 @@ proc add_task {task_new} {
 	close $outout_stream
 }
 
-
+init_mainWindow
 wm title . mainwindow
 wm geometry . 400x300+300+300
