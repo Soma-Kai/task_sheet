@@ -140,4 +140,4 @@ proc add_task {task_new} {
 
 init_mainWindow
 wm title . mainwindow
-wm geometry . 400x300+300+300
+wm geometry . 400x800+300+130
