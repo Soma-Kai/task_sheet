@@ -10,44 +10,53 @@ set TODAY_FILE {/Users/somakai/workspace/tcl-tk/study_sheet/DB/today.txt}
 set i 0
 variable path
 
-proc init_mainWindow {} {
-	global today_task
-	global TODAY_FILE
-	global selected
-	global i
+oo::class create main_window {
 
-	#set today_task 
-	set input_stream [open $TODAY_FILE r]
-	set today_task [split [gets $input_stream] :]
-	#delete the null
-	set index [lsearch $today_task ""]
-	set today_task [lreplace $today_task $index $index]
-	
-	frame .fr_main
-	pack .fr_main -expand 1 -fill both
+	constructor {} {
+		my init_mainWindow
+	}
 
-	#make header
-	label .fr_main.tlt -text "Today's Tasks"
-	pack .fr_main.tlt -side top
+	method init_mainWindow {} {
+		global today_task
+		global TODAY_FILE
+		global selected
+		global i
 
-	#task frame
-	frame .fr_main.task
-	pack .fr_main.task -side top -fill x
+		#set today_task 
+		set input_stream [open $TODAY_FILE r]
+		set today_task [split [gets $input_stream] :]
+		#delete the null
+		set index [lsearch $today_task ""]
+		set today_task [lreplace $today_task $index $index]
+		
+		frame .fr_main
+		pack .fr_main -expand 1 -fill both
 
-	button .fr_main.task.bt_gene -text "new" -command GenerateTask
-	pack .fr_main.task.bt_gene 
+		#make header
+		label .fr_main.tlt -text "Today's Tasks"
+		pack .fr_main.tlt -side top
+
+		#task frame
+		frame .fr_main.task
+		pack .fr_main.task -side top -fill x
+
+		button .fr_main.task.bt_gene -text "new" -command GenerateTask
+		pack .fr_main.task.bt_gene 
 
 
-	for {set i 0} {$i < [llength $today_task]} {incr i} {
-		checkbutton .fr_main.task.ck$i -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) -command save_task
-		.fr_main.task.ck$i deselect 
-		pack .fr_main.task.ck$i -expand 1 -fill x -anchor w -pady 1
+		for {set i 0} {$i < [llength $today_task]} {incr i} {
+			frame .fr_main.task.minifr$i 
+			pack .fr_main.task.minifr$i -side top -fill x
+			button .fr_main.task.minifr$i.bt  -height 2 -text ">" 
+			pack .fr_main.task.minifr$i.bt -side right
+			checkbutton .fr_main.task.minifr$i.ck -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) -command save_task
+			.fr_main.task.minifr$i.ck deselect 
+			pack .fr_main.task.minifr$i.ck -expand 1 -fill x -anchor w -pady 1 -side top
 
-		bind .fr_main.task.ck$i <Button-2> {
-			puts [.fr_main.task.ck$i cget -text]
-			destroy .fr_main
-			memo [lindex $today_task $i]
 		}
+	}
+	method add_text {i} {
+		puts $i
 	}
 }
 
@@ -138,6 +147,6 @@ proc add_task {task_new} {
 	close $outout_stream
 }
 
-init_mainWindow
+set main [main_window new]
 wm title . mainwindow
 wm geometry . 400x800+300+130
