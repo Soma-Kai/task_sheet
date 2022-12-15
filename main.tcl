@@ -47,7 +47,7 @@ oo::class create main_window {
 		for {set i 0} {$i < [llength $today_task]} {incr i} {
 			frame .fr_main.task.minifr$i 
 			pack .fr_main.task.minifr$i -side top -fill x
-			button .fr_main.task.minifr$i.bt  -height 2 -text ">" 
+			button ".fr_main.task.minifr$i.bt" -height 2 -text ">" -command "puts $i"
 			pack .fr_main.task.minifr$i.bt -side right
 			checkbutton .fr_main.task.minifr$i.ck -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) -command save_task
 			.fr_main.task.minifr$i.ck deselect 
