@@ -8,7 +8,8 @@ lappend auto_path "./test_put.tcl"
 set today_task {}
 set TODAY_FILE {/Users/somakai/workspace/tcl-tk/study_sheet/DB/today.txt}
 set i 0
-variable path
+variable main
+font create myfont -family arial -size 14
 
 oo::class create main_window {
 
@@ -45,10 +46,10 @@ oo::class create main_window {
 
 
 		for {set i 0} {$i < [llength $today_task]} {incr i} {
-			frame .fr_main.task.minifr$i 
-			pack .fr_main.task.minifr$i -side top -fill x
-			button ".fr_main.task.minifr$i.bt" -height 2 -text ">" -command "puts $i"
-			pack .fr_main.task.minifr$i.bt -side right
+			frame ".fr_main.task.minifr$i" 
+			pack ".fr_main.task.minifr$i" -side top -fill x
+			button ".fr_main.task.minifr$i.bt" -height 2 -text ">" -command "\$main add_text $i"
+			pack ".fr_main.task.minifr$i.bt" -side right -anchor n 
 			checkbutton .fr_main.task.minifr$i.ck -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) -command save_task
 			.fr_main.task.minifr$i.ck deselect 
 			pack .fr_main.task.minifr$i.ck -expand 1 -fill x -anchor w -pady 1 -side top
@@ -56,7 +57,9 @@ oo::class create main_window {
 		}
 	}
 	method add_text {i} {
-		puts $i
+		global myfont
+		text .fr_main.task.minifr$i.txt -font myfont -height 2
+		pack .fr_main.task.minifr$i.txt -fill x 
 	}
 }
 
@@ -110,9 +113,10 @@ proc GenerateTask {} {
 }
 
 proc return_gene { task_new } {
+	global main
 	add_task $task_new
 	destroy .fr_main
-	init_mainWindow
+	$main init_mainWindow
 	destroy .gen
 }
 
