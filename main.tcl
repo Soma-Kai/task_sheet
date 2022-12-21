@@ -63,36 +63,8 @@ oo::class create main_window {
 	}
 }
 
-#############
-#binding function
-proc memo {task_name} {
-	global path
-	#operation of file
-	puts $task_name
-	set path /Users/somakai/workspace/tcl-tk/study_sheet/DB/$task_name.txt
-	#exec touch $path
-	puts check
-	frame .f
-	pack .f
-	text .f.t 
-	pack .f.t 
-	.f.t insert end "remarks"
-	wm title . remarks
-	wm geometry . +300+300
-	bind .f.t <Return> {
-		global path
-		#save the remarks binding the corresponding task
-		set txt_remark [.f.t get 1.0 end]
-		#puts -nonewline $path $txt_remark
-		init_mainWindow
-		destroy .f
-	}
-}
 
-
-
-
-#########
+######################################
 #GenerateTask
 proc GenerateTask {} {
 	global today_task
