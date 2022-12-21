@@ -58,8 +58,30 @@ oo::class create main_window {
 	}
 	method add_text {i} {
 		global myfont
+		global today_task
+		destroy .fr_main.task.minifr$i.ck 
+		destroy .fr_main.task.minifr$i.bt
+
+		checkbutton .fr_main.task.minifr$i.ck -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) -command save_task
+		button .fr_main.task.minifr$i.bt -height 2 -text "<" -command "\$main reverse_text $i"
 		text .fr_main.task.minifr$i.txt -font myfont -height 2
+
+		pack .fr_main.task.minifr$i.bt -side right -anchor n
+		pack .fr_main.task.minifr$i.ck -expand 1 -fill x -anchor w -pady 1 -side top
 		pack .fr_main.task.minifr$i.txt -fill x 
+	}
+
+	method reverse_text i {
+		global today_task
+		destroy .fr_main.task.minifr$i.ck 
+		destroy .fr_main.task.minifr$i.bt
+		destroy .fr_main.task.minifr$i.txt
+
+		checkbutton .fr_main.task.minifr$i.ck -text [lindex $today_task $i] -bg gray -height 2 -variable selected($i) -command save_task
+		button ".fr_main.task.minifr$i.bt" -height 2 -text ">" -command "\$main add_text $i"
+
+		pack .fr_main.task.minifr$i.bt -side right -anchor n
+		pack .fr_main.task.minifr$i.ck -expand 1 -fill x -anchor w -pady 1 -side top
 	}
 }
 
