@@ -33,6 +33,8 @@ oo::class create main_window {
 		frame .fr_main
 		pack .fr_main -expand 1 -fill both
 
+		bind .fr_main <Button-1> "focus .fr_main"
+
 		#make header
 		label .fr_main.tlt -text "Today's Tasks"
 		pack .fr_main.tlt -side top
@@ -103,6 +105,7 @@ proc GenerateTask {} {
 	button .gen.bt_return -text return -command {return_gene $task_new; set task_new ""}
 	pack .gen.bt_return
 	
+	focus .gen.task_name
 	wm geometry .gen +350+350
 }
 
