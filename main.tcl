@@ -58,6 +58,7 @@ oo::class create main_window {
 
 		}
 	}
+
 	method add_text {i} {
 		global myfont
 		global today_task
@@ -71,6 +72,13 @@ oo::class create main_window {
 		pack .fr_main.task.minifr$i.bt -side right -anchor n
 		pack .fr_main.task.minifr$i.ck -expand 1 -fill x -anchor w -pady 1 -side top
 		pack .fr_main.task.minifr$i.txt -fill x 
+
+		bind ".fr_main.task.minifr$i.txt" <Return> "\$main extend_text $i"
+	}
+
+	method extend_text i {
+		set row [.fr_main.task.minifr$i.txt cget -height]
+		.fr_main.task.minifr$i.txt configure -height [expr $row + 1]
 	}
 
 	method reverse_text i {
